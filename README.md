@@ -1,6 +1,6 @@
 # jsonize-server 0.0.1
 
-This is the server interface for Jsonize
+This is the server system for Jsonize.
 
 
 ## Getting Started
@@ -20,7 +20,7 @@ The main usage is in combination with one of the Jsonize Clients.
 
 You can it via command line:
 
-```bash
+```bash 
 	cat input.json | jsonize --instance 
 ```
 
@@ -28,7 +28,7 @@ You can also run it as a HTTP server:
 
 ```bash
 	jsonize --server
-``
+```
 
 
 ## Contributors
