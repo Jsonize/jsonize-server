@@ -1,0 +1,31 @@
+{
+	"name": "jsonize-server",
+	"description": "Jsonize Server",
+	"version": "0.0.1",
+	"author": "Ziggeo",
+	"repository": "https://github.com/jsonize/jsonize-server",
+	"license": "Apache-2.0",
+    "engines": {
+	    "node": ""
+ 	},
+    "bin": {
+	    "jsonize": "bin/jsonize"
+	},
+	"preferGlobal": true,
+	"dependencies": {
+	    "betajs-scoped": "git://github.com/betajs/betajs-scoped.git",
+	    "betajs": "git://github.com/betajs/betajs.git",
+	    "node-getopt": ""
+	},
+	"devDependencies": {
+		"grunt": "",
+        "grunt-node-qunit": "",
+        "qunit": "",
+        "grunt-contrib-jshint": ""
+	},
+	"files": [
+	    "jsonize.js",
+  	    "bin",
+  	    "src"
+    ]
+}
