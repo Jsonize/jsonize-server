@@ -1,7 +1,7 @@
 {
 	"name": "jsonize-server",
 	"description": "Jsonize Server",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"author": "Ziggeo",
 	"repository": "https://github.com/jsonize/jsonize-server",
 	"license": "Apache-2.0",
@@ -12,9 +12,10 @@
 	    "jsonize": "bin/jsonize"
 	},
 	"preferGlobal": true,
+	"main": "jsonize.js",
 	"dependencies": {
-	    "betajs-scoped": "git://github.com/betajs/betajs-scoped.git",
-	    "betajs": "git://github.com/betajs/betajs.git",
+	    "betajs-scoped": "~0.0.13",
+	    "betajs": "~1.0.96",
 	    "node-getopt": ""
 	},
 	"devDependencies": {

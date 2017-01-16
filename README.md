@@ -1,4 +1,4 @@
-# jsonize-server 0.0.1
+# jsonize-server 0.0.4
 
 This is the server system for Jsonize.
 
@@ -7,8 +7,7 @@ This is the server system for Jsonize.
 
 
 ```javascript
-	git clone https://github.com/jsonize/js-ffmpeg.git
-	npm install -g
+	npm install -g jsonize-server
 ```
 
 
