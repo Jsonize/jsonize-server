@@ -89,16 +89,21 @@ Scoped.define("jsonize:JsonizeInvocation", [
 						payload: payload
 					});
 				}, this);
-				current.jsonizeTask.run(current.payload).success(function (payload) {
-					this._running = false;
-					this._finished = true;
-					current.result = payload;
-					current.executed = true;
-					this._execute(index + 1);
-				}, this).error(function (error) {
-					current.error = error;
+				try {
+                    current.jsonizeTask.run(current.payload).success(function (payload) {
+                        this._running = false;
+                        this._finished = true;
+                        current.result = payload;
+                        current.executed = true;
+                        this._execute(index + 1);
+                    }, this).error(function (error) {
+                        current.error = error;
+                        this.rollback();
+                    }, this);
+                } catch (e) {
+					current.error = e;
 					this.rollback();
-				}, this);
+				}
 			},
 			
 			terminate: function () {

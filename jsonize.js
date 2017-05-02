@@ -19,6 +19,8 @@ opt = require('node-getopt').create([
 ]).bindHelp().parseSystem().options;
 
 
+process.on('uncaughtException', function (err) { });
+
 if (opt.registry)
 	JSON.parse(require("fs").readFileSync(opt.registry)).forEach(require);
 
