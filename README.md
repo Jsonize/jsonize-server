@@ -1,4 +1,4 @@
-# jsonize-server 0.0.5
+# jsonize-server 0.0.6
 
 This is the server system for Jsonize.
 
@@ -23,10 +23,16 @@ You can it via command line:
 	cat input.json | jsonize --instance 
 ```
 
-You can also run it as a HTTP server:
+You can also run it as a plain server:
 
 ```bash
-	jsonize --server
+	jsonize --server 1234
+```
+
+As well as as a http server:
+
+```bash
+	jsonize --httpserver 1234
 ```
 
 
