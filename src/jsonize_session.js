@@ -1,16 +1,23 @@
 Scoped.define("jsonize:JsonizeSession", [
     "betajs:Class",
+    "betajs:Time",
     "jsonize:JsonizeInvocation"
-], function (Class, JsonizeInvocation, scoped) {
+], function (Class, Time, JsonizeInvocation, scoped) {
 	return Class.extend({scoped: scoped}, function (inherited) {
 		return {
 			
-			constructor: function (handler, readStream, writeStream) {
+			constructor: function (handler, readStream, writeStream, task, payload, options) {
 				inherited.constructor.call(this);
 				this._openTransactions = {};
 				this._handler = handler;
-				this._readStream = readStream;
-				this._writeStream = writeStream;
+				this._task = task;
+                this._readStream = readStream;
+                this._writeStream = writeStream;
+                this._options = options || {};
+                if (task && payload) {
+                    this._read(payload);
+                    return;
+                }
 				var readline = require('readline');
 				var rl = readline.createInterface({
 			  	    input: readStream,
@@ -24,15 +31,28 @@ Scoped.define("jsonize:JsonizeSession", [
 			},
 			
 			_write: function (transactionId, type, payload) {
-				this._writeStream.write(JSON.stringify({
-					transaction: transactionId,
-					type: type,
-					payload: payload
-				}) + "\n");
+				if (this._options.simpleResult) {
+					if (payload.length === 1 && payload[0])
+						payload = payload[0];
+					if (payload.result)
+						payload = payload.result;
+					var result = [];
+					for (var key in payload)
+						result.push("\t" + key + " : " + payload[key]);
+                    this._writeStream.write(type + ":\n" + result.join("\n") + "\n");
+				} else {
+                    this._writeStream.write(JSON.stringify({
+						transaction: transactionId,
+						type: type,
+						payload: payload
+					}) + "\n");
+				}
 			},
 			
 			_read: function (json) {
-				if (json.type === 'invoke')
+				if (this._task)
+					this._cmdInvoke(Time.now(), {task: this._task, payload: json});
+				else if (json.type === 'invoke')
 					this._cmdInvoke(json.transaction, json.payload);
 				else if (json.type === 'terminate')
 					this._cmdTerminate(json.transaction);
@@ -81,7 +101,8 @@ Scoped.define("jsonize:JsonizeSession", [
 			_callbackEvent: function (transactionId, payload) {
 				if (!this._openTransactions[transactionId])
 					throw "Unknown transaction " + transactionId;
-				this._write(transactionId, "event", payload);
+				if (!this._options.singleResult)
+					this._write(transactionId, "event", payload);
 			}
 
 		};

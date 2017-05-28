@@ -4,8 +4,8 @@ Scoped.define("jsonize:HttpServerJsonizeHandler", [
 	return AbstractJsonizeHandler.extend({scoped: scoped}, function (inherited) {
 		return {
 			
-			constructor: function (port) {
-				inherited.constructor.call(this);
+			constructor: function (port, options) {
+				inherited.constructor.call(this, options);
 				var Express = require('express');
                 var express = Express();
                 var self = this;

@@ -4,8 +4,8 @@ Scoped.define("jsonize:ServerJsonizeHandler", [
 	return AbstractJsonizeHandler.extend({scoped: scoped}, function (inherited) {
 		return {
 			
-			constructor: function (port) {
-				inherited.constructor.call(this);
+			constructor: function (port, options) {
+				inherited.constructor.call(this, options);
 				var net = require('net');
 				var self = this;
 				net.createServer(function(socket) {
