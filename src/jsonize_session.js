@@ -31,15 +31,19 @@ Scoped.define("jsonize:JsonizeSession", [
 			},
 			
 			_write: function (transactionId, type, payload) {
-				if (this._options.simpleResult) {
+				if (this._options.simpleResult || this._task) {
 					if (payload.length === 1 && payload[0])
 						payload = payload[0];
 					if (payload.result)
 						payload = payload.result;
-					var result = [];
-					for (var key in payload)
-						result.push("\t" + key + " : " + payload[key]);
-                    this._writeStream.write(type + ":\n" + result.join("\n") + "\n");
+					if (this._options.simpleResult) {
+                        var result = [];
+                        for (var key in payload)
+                            result.push("\t" + key + " : " + payload[key]);
+                        this._writeStream.write(type + ":\n" + result.join("\n") + "\n");
+                    } else {
+                        this._writeStream.write(JSON.stringify(payload));
+					}
 				} else {
                     this._writeStream.write(JSON.stringify({
 						transaction: transactionId,
