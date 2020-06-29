@@ -73,7 +73,7 @@ else if (opt['async-instance']) {
     });
     var outFile = opt['out-file'];
     if (!outFile) {
-        outFile = "/tmp/jsonize-" + Math.round(Math.random() * 1000000000) + ".jsons";
+        outFile = "/tmp/jsonize-" + Math.round(Math.random() * 1000000000) + ".json";
         args.push("--out-file");
         args.push(outFile);
     }
