@@ -22,6 +22,7 @@ opt = require('node-getopt').create([
     ["", "register=FILES", "register files separated by comma"]
 ]).bindHelp().parseSystem().options;
 */
+
 var opts = {};
 for (var i = 2; i < process.argv.length; ++i) {
     var key = process.argv[i].substring(2);
@@ -32,7 +33,7 @@ for (var i = 2; i < process.argv.length; ++i) {
     }
     opts[key] = value;
 }
-var keys = ["instance", "server", "task", "httpserver", "registry", "register", "single-result", "simple-result"];
+var keys = ["instance", "server", "task", "httpserver", "registry", "register", "single-result", "simple-result", "async-instance", "async-state", "out-file", "in-json"];
 var opt = {};
 var custom = opts;
 keys.forEach(function (key) {
@@ -55,15 +56,42 @@ var handler = null;
 
 var handlerOpts = {
     singleResult: opt["single-result"],
-    simpleResult: opt["simple-result"]
+    simpleResult: opt["simple-result"],
+    outFile: opt["out-file"],
+    inJson: opt['in-json']
 };
 
 if (opt.server)
     handler = new Jsonize.ServerJsonizeHandler(parseInt(opt.server, 10), handlerOpts);
 else if (opt.httpserver)
     handler = new Jsonize.HttpServerJsonizeHandler(parseInt(opt.httpserver, 10), handlerOpts);
-else
+else if (opt.instance)
 	handler = new Jsonize.InstanceJsonizeHandler(opt.task, BetaJS.Types.is_empty(custom) ? null : custom, handlerOpts);
+else if (opt['async-instance']) {
+    var args = process.argv.map(function (key) {
+        return key === '--async-instance' ? '--instance' : key;
+    });
+    var outFile = opt['out-file'];
+    if (!outFile) {
+        outFile = "/tmp/jsonize-" + Math.round(Math.random() * 1000000000) + ".jsons";
+        args.push("--out-file");
+        args.push(outFile);
+    }
+    var child = require('child_process').spawn(args.shift(), args, {
+        detached: true,
+        stdio: [ process.stdin, 'ignore', 'ignore' ]
+    });
+    child.unref();
+    process.stdout.write(JSON.stringify({
+        "record": outFile
+    }));
+} else if (opt['async-state']) {
+    var fileData = (require("fs").readFileSync(opt["out-file"]) + "").split("\n");
+    var parsed = parseInt(opt['async-state'], 10);
+    if (!isNaN(parsed))
+        fileData = fileData.slice(parsed);
+    process.stdout.write(fileData.join("\n"));
+}
 
 if (handler)
 	handler.run();

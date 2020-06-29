@@ -11,7 +11,12 @@ Scoped.define("jsonize:InstanceJsonizeHandler", [
 			},
 
             _run: function () {
-                this._newSession(process.stdin, process.stdout, this._task, this._payload);
+                this._newSession(
+					this._options.inJson ? require('stream').Readable.from(this._options.inJson) : process.stdin,
+					this._options.outFile ? require("fs").createWriteStream(this._options.outFile) : process.stdout,
+					this._task,
+					this._payload
+				);
             }
 
 		};

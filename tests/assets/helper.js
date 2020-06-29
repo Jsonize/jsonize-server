@@ -1,6 +1,6 @@
 global.jsonize = function (json) {
-	return JSON.parse(require("child_process").execSync(
+	return require("child_process").execSync(
         __dirname + "/../../bin/jsonize --instance",
         { input: JSON.stringify(json) }
-    ).toString());
+    ).toString().trim().split("\n").map(JSON.parse, JSON);
 };

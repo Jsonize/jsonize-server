@@ -42,7 +42,7 @@ Scoped.define("jsonize:JsonizeSession", [
                             result.push("\t" + key + " : " + payload[key]);
                         this._writeStream.write(type + ":\n" + result.join("\n") + "\n");
                     } else {
-                        this._writeStream.write(JSON.stringify(payload));
+                        this._writeStream.write(JSON.stringify(payload) + "\n");
 					}
 				} else {
                     this._writeStream.write(JSON.stringify({
